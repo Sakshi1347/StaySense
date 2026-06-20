@@ -13,7 +13,7 @@ export default function Modal({
 }: ModalProps) {
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg w-96">
+     <div className="bg-white dark:bg-gray-800 text-black dark:text-white p-6 rounded-lg w-96">
         <h2 className="text-xl font-bold mb-4">
           {title}
         </h2>

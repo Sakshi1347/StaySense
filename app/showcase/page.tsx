@@ -1,21 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import ThemeToggle from "@/components/ThemeToggle";
 import {
   Button,
   Input,
   Loader,
   Toast,
   Modal,
-} from "@/components/ui";
+} from "@/components/ui/Index";
 export default function ShowcasePage() {
     const [isOpen, setIsOpen] = useState(false);
     return (
-  <main className="p-10 space-y-10">
+   <main className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300 p-10 space-y-10">
+  
 
     <h1 className="text-4xl font-bold">
       UI Component Showcase
     </h1>
+    <ThemeToggle />
+
     <section className="space-y-4">
 
   <h2 className="text-2xl font-semibold">
