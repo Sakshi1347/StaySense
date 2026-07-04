@@ -94,4 +94,4 @@ Server running on port 5000
 
 The database schema is shown below.
 
-(Add the schema image here after creating it.)
+![Database Schema](schema.png)
