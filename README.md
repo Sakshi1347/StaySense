@@ -34,3 +34,64 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+
+
+# StaySense AI
+
+## Database Choice
+
+This project uses **MongoDB Atlas** with **Mongoose**.
+
+### Why MongoDB?
+
+- Flexible NoSQL database
+- Easy integration with Node.js and Express
+- Suitable for storing homestay information
+- Cloud-hosted using MongoDB Atlas
+- Scalable and beginner-friendly
+
+---
+
+## Database Setup
+
+### 1. Install dependencies
+
+```bash
+cd backend
+npm install
+```
+
+### 2. Create a `.env` file
+
+Copy the variables from `.env.example`.
+
+Example:
+
+```env
+PORT=5000
+MONGO_URI=your_mongodb_connection_string
+```
+
+### 3. Start the backend
+
+```bash
+npm run dev
+```
+
+If everything is configured correctly, you should see:
+
+```
+MongoDB Connected
+Server running on port 5000
+```
+
+---
+
+## Schema Diagram
+
+The database schema is shown below.
+
+(Add the schema image here after creating it.)
