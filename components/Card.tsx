@@ -1,15 +1,21 @@
 type CardProps = {
+  id: string;
   title: string;
   description: string;
   location: string;
   price: number;
+  onDelete: (id: string) => void;
+  onEdit: (id: string) => void;
 };
 
 export default function Card({
+  id,
   title,
   description,
   location,
   price,
+  onDelete,
+  onEdit,
 }: CardProps) {
   return (
     <div className="border rounded-xl p-6 shadow">
@@ -27,9 +33,24 @@ export default function Card({
         💰 <strong>Price:</strong> ₹{price}
       </p>
 
-      <button className="mt-4 bg-blue-600 text-white px-4 py-2 rounded">
-        View Details
-      </button>
+      <div className="mt-4 flex gap-2">
+        <button className="bg-blue-600 text-white px-4 py-2 rounded">
+          View Details
+        </button>
+
+        <button
+          onClick={() => onDelete(id)}
+          className="bg-red-600 text-white px-4 py-2 rounded"
+        >
+          Delete
+        </button>
+        <button
+  onClick={() => onEdit(id)}
+  className="bg-yellow-500 text-white px-4 py-2 rounded"
+>
+  Edit
+</button>
+      </div>
     </div>
   );
 }
