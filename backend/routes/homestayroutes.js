@@ -1,3 +1,4 @@
+const { protect } = require("../middleware/authMiddleware");
 const express = require("express");
 
 const router = express.Router();
@@ -11,16 +12,14 @@ const {
   searchHomestays,
 } = require("../controllers/homestayController");
 
+// Public routes
 router.get("/", getHomestays);
-
 router.get("/search", searchHomestays);
-
 router.get("/:id", getHomestay);
 
-router.post("/", createHomestay);
-
-router.put("/:id", updateHomestay);
-
-router.delete("/:id", deleteHomestay);
+// Protected routes
+router.post("/", protect, createHomestay);
+router.put("/:id", protect, updateHomestay);
+router.delete("/:id", protect, deleteHomestay);
 
 module.exports = router;

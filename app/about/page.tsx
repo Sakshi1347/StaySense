@@ -1,7 +1,22 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 export default function About() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.push("/login");
+    }
+  }, [router]);
+
   return (
     <>
       <Navbar />
@@ -12,7 +27,7 @@ export default function About() {
         </h1>
 
         <p className="mt-4">
-          StaySense AI empowers rural homestays through smart technology.
+          This page is protected and can only be accessed after logging in.
         </p>
       </main>
 

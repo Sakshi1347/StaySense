@@ -24,15 +24,30 @@ export default function Home() {
   const [description, setDescription] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/homestays")
-      .then((res) => res.json())
-      .then((data) => setHomestays(data))
-      .catch((err) => console.log(err));
-  }, []);
+  const token = localStorage.getItem("token");
+
+  fetch("http://localhost:5000/api/homestays", {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      if (Array.isArray(data)) {
+        setHomestays(data);
+      } else {
+        setHomestays([]);
+      }
+    })
+    .catch((err) => console.log(err));
+}, []);
 
   const handleDelete = async (id: string) => {
     await fetch(`http://localhost:5000/api/homestays/${id}`, {
       method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
     });
 
     setHomestays(homestays.filter((home) => home._id !== id));

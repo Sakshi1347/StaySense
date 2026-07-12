@@ -1,7 +1,28 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
 
 export default function Dashboard() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      router.push("/login");
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    alert("Logged out successfully");
+    router.push("/login");
+  };
+
   return (
     <>
       <Navbar />
@@ -12,8 +33,15 @@ export default function Dashboard() {
         </h1>
 
         <p className="mt-4">
-          Overview of bookings and guest insights.
+          Welcome to StaySense AI Dashboard.
         </p>
+
+        <button
+          onClick={handleLogout}
+          className="mt-8 bg-red-600 text-white px-4 py-2 rounded"
+        >
+          Logout
+        </button>
       </main>
 
       <Footer />
