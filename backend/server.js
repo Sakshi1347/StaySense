@@ -1,15 +1,20 @@
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+const dotenv = require("dotenv");
+dotenv.config();
+
+const express = require("express");
 const passport = require("passport");
 const session = require("express-session");
+const cors = require("cors");
 
 const connectDB = require("./config/db");
-const express = require("express");
-const dotenv = require("dotenv");
-const cors = require("cors");
-const homestayRoutes = require("./routes/homestayRoutes");
-const errorHandler = require("./middleware/errorMiddleware");
-const authRoutes = require("./routes/authRoutes");
 
-dotenv.config();
+const homestayRoutes = require("./routes/homestayRoutes");
+const authRoutes = require("./routes/authRoutes");
+const aiRoutes = require("./routes/aiRoutes");
+
+const errorHandler = require("./middleware/errorMiddleware");
+
 require("./config/passport");
 connectDB();
 
@@ -42,6 +47,7 @@ app.use("/api/auth/register", authLimiter);
 
 app.use("/api/homestays", homestayRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/ai", aiRoutes);
 app.use(errorHandler);
 app.use("/api/homestays", homestayRoutes);
 
