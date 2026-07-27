@@ -10,7 +10,7 @@ const {
   updateHomestay,
   deleteHomestay,
   searchHomestays,
-} = require("../controllers/homestayController");
+} = require("../controllers/homestaycontroller");
 
 // Public routes
 router.get("/", getHomestays);

@@ -2,7 +2,7 @@ const express = require("express");
 
 const {
   generateAIDescription,
-} = require("../controllers/aiController");
+} = require("../controllers/aicontroller");
 
 const router = express.Router();
 

@@ -1,3 +1,7 @@
+"use client";
+
+import Link from "next/link";
+
 export default function Hero() {
   return (
     <section className="text-center py-20 px-6">
@@ -9,9 +13,12 @@ export default function Hero() {
         Manage bookings and enhance guest experiences effortlessly.
       </p>
 
-      <button className="mt-8 bg-blue-600 text-white px-6 py-3 rounded-lg">
+      <Link
+        href="/login"
+        className="inline-block mt-8 bg-blue-600 text-white px-6 py-3 rounded-lg"
+      >
         Get Started
-      </button>
+      </Link>
     </section>
   );
 }

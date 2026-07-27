@@ -1,22 +1,42 @@
 "use client";
 
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { fetchProfile, saveAuth } from "@/lib/api";
 
-export default function OAuthSuccess() {
+function OAuthSuccessInner() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
-    const token = searchParams.get("token");
+    const completeOAuth = async () => {
+      const token = searchParams.get("token");
 
-    if (token) {
-      localStorage.setItem("token", token);
-      router.push("/dashboard");
-    } else {
-      router.push("/login");
-    }
-  }, []);
+      if (!token) {
+        router.replace("/login");
+        return;
+      }
+
+      try {
+        const user = await fetchProfile(token);
+        saveAuth(token, user);
+        router.replace("/dashboard");
+      } catch {
+        saveAuth(token);
+        router.replace("/dashboard");
+      }
+    };
+
+    void completeOAuth();
+  }, [router, searchParams]);
 
   return <h2 className="p-10">Signing you in...</h2>;
+}
+
+export default function OAuthSuccess() {
+  return (
+    <Suspense fallback={<h2 className="p-10">Signing you in...</h2>}>
+      <OAuthSuccessInner />
+    </Suspense>
+  );
 }

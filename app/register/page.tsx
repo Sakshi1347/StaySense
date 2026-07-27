@@ -6,28 +6,29 @@ import Link from "next/link";
 
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
-import { API_BASE, saveAuth } from "@/lib/api";
+import { API_BASE } from "@/lib/api";
 
-export default function Login() {
+export default function Register() {
   const router = useRouter();
 
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
     setLoading(true);
 
     try {
-      const res = await fetch(`${API_BASE}/api/auth/login`, {
+      const res = await fetch(`${API_BASE}/api/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
       });
 
       const data = await res.json();
@@ -35,27 +36,22 @@ export default function Login() {
       if (res.status === 429) {
         setError(
           data.message ||
-            "Too many login attempts. Please try again after 15 minutes."
+            "Too many attempts. Please try again after 15 minutes."
         );
         return;
       }
 
-      if (res.ok && data.token) {
-        saveAuth(data.token, data.user);
-        router.push("/dashboard");
+      if (res.ok) {
+        router.push("/login");
         return;
       }
 
-      setError(data.message || "Login failed");
+      setError(data.message || "Registration failed");
     } catch {
-      setError("Unable to connect to the server.");
+      setError("Unable to connect to server.");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    window.location.href = `${API_BASE}/api/auth/google`;
   };
 
   return (
@@ -63,9 +59,17 @@ export default function Login() {
       <Navbar />
 
       <main className="p-8 max-w-lg mx-auto">
-        <h1 className="text-4xl font-bold mb-6">Login</h1>
+        <h1 className="text-4xl font-bold mb-6">Register</h1>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleRegister}>
+          <input
+            className="border p-2 w-full mb-3"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            required
+          />
+
           <input
             className="border p-2 w-full mb-3"
             type="email"
@@ -78,9 +82,10 @@ export default function Login() {
           <input
             type="password"
             className="border p-2 w-full mb-3"
-            placeholder="Password"
+            placeholder="Password (min 6 characters)"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            minLength={6}
             required
           />
 
@@ -89,24 +94,16 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded w-full disabled:opacity-60"
+            className="bg-green-600 text-white px-4 py-2 rounded w-full disabled:opacity-60"
           >
-            {loading ? "Logging in..." : "Login"}
+            {loading ? "Creating account..." : "Register"}
           </button>
         </form>
 
-        <button
-          type="button"
-          onClick={handleGoogleLogin}
-          className="bg-red-500 text-white px-4 py-2 rounded w-full mt-3"
-        >
-          Sign in with Google
-        </button>
-
         <p className="text-center mt-5 text-sm text-gray-600">
-          Don&apos;t have an account?{" "}
-          <Link href="/register" className="text-blue-600 underline">
-            Register
+          Already have an account?{" "}
+          <Link href="/login" className="text-blue-600 underline">
+            Login
           </Link>
         </p>
       </main>

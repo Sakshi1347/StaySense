@@ -1,5 +1,7 @@
 const passport = require("passport");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
 const User = require("../models/User");
 
 passport.use(
@@ -8,26 +10,27 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL:
+        process.env.GOOGLE_CALLBACK_URL ||
         "http://localhost:5000/api/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        console.log("Google profile received:", profile.displayName);
-
         const email = profile.emails?.[0]?.value;
 
         if (!email) {
-          console.log("Google email not found");
           return done(null, false);
         }
 
         let user = await User.findOne({ email });
 
         if (!user) {
+          const randomPassword = crypto.randomBytes(32).toString("hex");
+          const hashedPassword = await bcrypt.hash(randomPassword, 10);
+
           user = await User.create({
-            name: profile.displayName,
-            email: email,
-            password: "google-oauth-user",
+            name: profile.displayName || email.split("@")[0],
+            email,
+            password: hashedPassword,
           });
         }
 

@@ -1,4 +1,4 @@
-const Homestay = require("../models/Homestay");
+const Homestay = require("../models/homestay");
 
 exports.getHomestays = async (req, res) => {
   const homestays = await Homestay.find();

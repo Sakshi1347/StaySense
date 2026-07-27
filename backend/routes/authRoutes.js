@@ -5,49 +5,36 @@ const express = require("express");
 const {
   registerUser,
   loginUser,
+  getProfile,
 } = require("../controllers/authController");
+const { protect } = require("../middleware/authMiddleware");
 
 const router = express.Router();
+
+const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
 
 router.post(
   "/register",
   [
-    body("name")
-      .notEmpty()
-      .withMessage("Name is required"),
-
-    body("email")
-      .isEmail()
-      .withMessage("Please enter a valid email"),
-
+    body("name").notEmpty().withMessage("Name is required"),
+    body("email").isEmail().withMessage("Please enter a valid email"),
     body("password")
       .isLength({ min: 6 })
       .withMessage("Password must be at least 6 characters"),
   ],
   registerUser
 );
+
 router.post(
   "/login",
   [
-    body("email")
-      .isEmail()
-      .withMessage("Please enter a valid email"),
-
-    body("password")
-      .notEmpty()
-      .withMessage("Password is required"),
+    body("email").isEmail().withMessage("Please enter a valid email"),
+    body("password").notEmpty().withMessage("Password is required"),
   ],
   loginUser
 );
 
-const { protect } = require("../middleware/authMiddleware");
-
-router.get("/profile", protect, (req, res) => {
-  res.status(200).json({
-    message: "Protected Route Accessed Successfully",
-    user: req.user,
-  });
-});
+router.get("/profile", protect, getProfile);
 
 router.get(
   "/google",
@@ -59,7 +46,7 @@ router.get(
 router.get(
   "/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/login",
+    failureRedirect: `${FRONTEND_URL}/login`,
     session: false,
   }),
   (req, res) => {
@@ -71,9 +58,7 @@ router.get(
       }
     );
 
-    res.redirect(
-      `http://localhost:3000/oauth-success?token=${token}`
-    );
+    res.redirect(`${FRONTEND_URL}/oauth-success?token=${token}`);
   }
 );
 
